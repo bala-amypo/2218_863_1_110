@@ -10,7 +10,7 @@ import java.util.List;
 
 @Service
 
-public class ResourceService implements Resource {
+public class ResourceServiceImpl implements ResourceService {
 
     private final ResourceRepository resourceRepository;
 
