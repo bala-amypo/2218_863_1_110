@@ -35,5 +35,10 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll();
     }
 
-    
+    @Override
+    public User authenticate(String email, String password) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email));
+        return user;
+    }
 }
