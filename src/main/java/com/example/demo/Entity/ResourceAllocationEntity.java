@@ -1,16 +1,11 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.*; 
 
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "resource_allocations")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Table(name = "resource_allocations") 
 public class ResourceAllocation {
 
     @Id
@@ -18,11 +13,11 @@ public class ResourceAllocation {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "resource_id", nullable = false)
+    @JoinColumn(name = "resource_id")
     private Resource resource;
 
     @OneToOne
-    @JoinColumn(name = "request_id", unique = true, nullable = false)
+    @JoinColumn(name = "request_id", unique = true)
     private ResourceRequest request;
 
     private LocalDateTime allocatedAt;
@@ -31,8 +26,58 @@ public class ResourceAllocation {
 
     private String notes;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Resource getResource() {
+        return resource;
+    }
+
+    public void setResource(Resource resource) {
+        this.resource = resource;
+    }
+
+    public ResourceRequest getRequest() {
+        return request;
+    }
+
+    public void setRequest(ResourceRequest request) {
+        this.request = request;
+    }
+
+    public LocalDateTime getAllocatedAt() {
+        return allocatedAt;
+    }
+
+    public void setAllocatedAt(LocalDateTime allocatedAt) {
+        this.allocatedAt = allocatedAt;
+    }
+
+    public Boolean getConflictFlag() {
+        return conflictFlag;
+    }
+
+    public void setConflictFlag(Boolean conflictFlag) {
+        this.conflictFlag = conflictFlag;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
     @PrePersist
-    public void onAllocate() {
-        this.allocatedAt = LocalDateTime.now();
+    protected void onCreate() {
+        if (allocatedAt == null) {
+            allocatedAt = LocalDateTime.now();
+        }
     }
 }
