@@ -10,7 +10,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class AllocationRuleServiceImpl implements AllocationRuleService {
+public class AllocationRuleService implements AllocationRuleService {
 
     private final AllocationRuleRepository ruleRepository;
 
