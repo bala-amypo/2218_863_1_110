@@ -14,6 +14,9 @@ public class ResourceServiceImpl implements ResourceService {
 
     private final ResourceRepository resourceRepository;
 
+    public ResourceServiceImpl(ResourceRepository resourceRepository) {
+        this.resourceRepository = resourceRepository;
+    }
     @Override
     public Resource createResource(Resource resource) {
         if (resource.getCapacity() == null || resource.getCapacity() < 1) {

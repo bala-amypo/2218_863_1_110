@@ -14,13 +14,16 @@ import java.util.List;
 @Service
 public class ResourceAllocationServiceImpl implements ResourceAllocationService {
 
-   private final RequestRepository requestRepository;
+  // 1. Update these types to match your imports/files exactly
+    private final ResourceRequestRepository requestRepository; 
     private final ResourceRepository resourceRepository;
-    private final AllocationRepository allocationRepository;
+    private final ResourceAllocationRepository allocationRepository;
 
-    public ResourceAllocationServiceImpl(RequestRepository requestRepository, 
-                                         ResourceRepository resourceRepository, 
-                                         AllocationRepository allocationRepository) {
+    // 2. Update the constructor parameters to match
+    public ResourceAllocationServiceImpl(
+            ResourceRequestRepository requestRepository,
+            ResourceRepository resourceRepository,
+            ResourceAllocationRepository allocationRepository) {
         this.requestRepository = requestRepository;
         this.resourceRepository = resourceRepository;
         this.allocationRepository = allocationRepository;
