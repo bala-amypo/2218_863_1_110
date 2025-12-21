@@ -7,12 +7,12 @@ import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.ResourceAllocationRepository;
 import com.example.demo.repository.ResourceRepository;
 import com.example.demo.repository.ResourceRequestRepository;
-import com.example.demo.service.ResourceAllocation;
+import com.example.demo.service.ResourceAllocationService;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ResourceAllocationService implements ResourceAllocation {
+public class ResourceAllocationServiceImpl implements ResourceAllocationService {
 
     private final ResourceRequestRepository requestRepository;
     private final ResourceRepository resourceRepository;
