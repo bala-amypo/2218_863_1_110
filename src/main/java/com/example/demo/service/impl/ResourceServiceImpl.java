@@ -23,7 +23,7 @@ public class ResourceServiceImpl implements ResourceService {
             throw new IllegalArgumentException("Resource type cannot be null or empty");
         }
         if (resource.getCapacity() == null || resource.getCapacity() < 1) {
-            throw new IllegalArgumentException("Capacity must be at least 1");
+            throw new BadRequestException("Capacity must be at least 1");
         }
         if (resourceRepository.existsByResourceName(resource.getResourceName())) {
             throw new IllegalArgumentException("Resource with name " + resource.getResourceName() + " already exists");
