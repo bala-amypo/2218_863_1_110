@@ -50,10 +50,10 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 
-    @Override
-    public User authenticate(String email, String password) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email));
-        return user;
-    }
+    // @Override
+    // public User authenticate(String email, String password) {
+    //     User user = userRepository.findByEmail(email)
+    //             .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email));
+    //     return user;
+    // }
 }
