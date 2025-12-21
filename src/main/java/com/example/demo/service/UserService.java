@@ -9,4 +9,6 @@ public interface UserService {
     User getUser(Long id);
 
     List<User> getAllUsers();
+
+    User authenticate(String email, String password);
 }
