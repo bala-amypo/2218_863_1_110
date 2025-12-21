@@ -5,13 +5,13 @@ import com.example.demo.entity.User;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.ResourceRequestRepository;
 import com.example.demo.repository.UserRepository;
-import com.example.demo.service.ResourceRequestService;
+import com.example.demo.service.ResourceRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class ResourceRequestServiceImpl implements ResourceRequestService {
+public class ResourceRequestService implements ResourceRequest {
 
     private final ResourceRequestRepository requestRepository;
     private final UserRepository userRepository;
