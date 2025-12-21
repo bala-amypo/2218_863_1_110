@@ -37,12 +37,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User authenticate(String email, String password) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email));
-
-        if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new IllegalArgumentException("Invalid password");
-        }
+    
         return user;
     }
 }
