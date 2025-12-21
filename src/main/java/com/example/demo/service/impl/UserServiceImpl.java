@@ -35,9 +35,5 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll();
     }
 
-    @Override
-    public User authenticate(String email, String password) {
     
-        return user;
-    }
 }
