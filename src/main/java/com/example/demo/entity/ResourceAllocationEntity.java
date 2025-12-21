@@ -1,12 +1,11 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.*; 
-
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "resource_allocations") 
-public class ResourceAllocation {
+@Table(name = "resource_allocations")
+public class ResourceAllocationEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +24,23 @@ public class ResourceAllocation {
     private Boolean conflictFlag;
 
     private String notes;
+
+    public ResourceAllocation() {
+    }
+
+    public ResourceAllocation(Resource resource, ResourceRequest request, Boolean conflictFlag, String notes) {
+        this.resource = resource;
+        this.request = request;
+        this.conflictFlag = conflictFlag;
+        this.notes = notes;
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        if (this.allocatedAt == null) {
+            this.allocatedAt = LocalDateTime.now();
+        }
+    }
 
     public Long getId() {
         return id;
@@ -72,12 +88,5 @@ public class ResourceAllocation {
 
     public void setNotes(String notes) {
         this.notes = notes;
-    }
-
-    @PrePersist
-    protected void onCreate() {
-        if (allocatedAt == null) {
-            allocatedAt = LocalDateTime.now();
-        }
     }
 }
