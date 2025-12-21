@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "allocation_rules")
-public class AllocationRuleEntity {
+public class AllocationRule {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,10 +20,10 @@ public class AllocationRuleEntity {
 
     private LocalDateTime createdAt;
 
-    public AllocationRuleEntity() {
+    public AllocationRule() {
     }
 
-    public AllocationRuleEntity(String ruleName, String ruleType, Integer priorityWeight) {
+    public AllocationRule(String ruleName, String ruleType, Integer priorityWeight) {
         this.ruleName = ruleName;
         this.ruleType = ruleType;
         this.priorityWeight = priorityWeight;

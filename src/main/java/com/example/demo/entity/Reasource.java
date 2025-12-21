@@ -6,7 +6,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "resources")
-public class ResourceEntity {
+public class Resource {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,10 +27,10 @@ public class ResourceEntity {
     @OneToMany(mappedBy = "resource")
     private List<ResourceAllocation> allocations;
 
-    public ResourceEntity() {
+    public Resource() {
     }
 
-    public ResourceEntity(String resourceName, String resourceType, Integer capacity, String location) {
+    public Resource(String resourceName, String resourceType, Integer capacity, String location) {
         this.resourceName = resourceName;
         this.resourceType = resourceType;
         this.capacity = capacity;
