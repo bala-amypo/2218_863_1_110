@@ -16,7 +16,7 @@ public class ResourceRequestService implements ResourceRequest {
     private final ResourceRequestRepository requestRepository;
     private final UserRepository userRepository;
 
-    public ResourceRequestServiceImpl(ResourceRequestRepository requestRepository,
+    public ResourceRequestService(ResourceRequestRepository requestRepository,
                                       UserRepository userRepository) {
         this.requestRepository = requestRepository;
         this.userRepository = userRepository;
