@@ -26,10 +26,10 @@ public class UserEntity {
     @OneToMany(mappedBy = "requestedBy")
     private List<ResourceRequest> resourceRequests;
 
-    public UserEntity() {
+    public User() {
     }
 
-    public UserEntity(String fullName, String email, String password, String role) {
+    public User(String fullName, String email, String password, String role) {
         this.fullName = fullName;
         this.email = email;
         this.password = password;

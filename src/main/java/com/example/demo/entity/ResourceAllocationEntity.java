@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "resource_allocations")
-public class ResourceAllocationEntity {
+public class ResourceAllocation  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,10 +25,10 @@ public class ResourceAllocationEntity {
 
     private String notes;
 
-    public ResourceAllocationEntity() {
+    public ResourceAllocation() {
     }
 
-    public ResourceAllocationEntity(Resource resource, ResourceRequest request, Boolean conflictFlag, String notes) {
+    public ResourceAllocation(Resource resource, ResourceRequest request, Boolean conflictFlag, String notes) {
         this.resource = resource;
         this.request = request;
         this.conflictFlag = conflictFlag;
