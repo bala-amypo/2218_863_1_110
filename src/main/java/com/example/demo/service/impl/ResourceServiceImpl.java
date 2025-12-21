@@ -15,8 +15,8 @@ public class ResourceServiceImpl implements ResourceService {
     private final ResourceAllocationRepository resourceRepository;
 
     public ResourceServiceImpl(ResourceAllocationRepository resourceRepository) {
-        this.resourceRepository = resourceRepository;
-    }
+    this.resourceRepository = resourceRepository;
+}
     @Override
     public Resource createResource(Resource resource) {
         if (resource.getCapacity() == null || resource.getCapacity() < 1) {
