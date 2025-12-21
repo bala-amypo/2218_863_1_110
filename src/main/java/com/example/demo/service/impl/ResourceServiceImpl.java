@@ -2,7 +2,7 @@ package com.example.demo.service.impl;
 
 import com.example.demo.entity.Resource;
 import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.repository.ResourceRepository;
+import com.example.demo.repository.ResourceAllocationRepository;
 import com.example.demo.service.ResourceService;
 
 import org.springframework.stereotype.Service;
@@ -12,9 +12,9 @@ import java.util.List;
 
 public class ResourceServiceImpl implements ResourceService {
 
-    private final ResourceRepository resourceRepository;
+    private final ResourceAllocationRepository resourceRepository;
 
-    public ResourceServiceImpl(ResourceRepository resourceRepository) {
+    public ResourceServiceImpl(ResourceAllocationRepository resourceRepository) {
         this.resourceRepository = resourceRepository;
     }
     @Override
