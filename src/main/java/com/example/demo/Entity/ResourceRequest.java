@@ -1,14 +1,11 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
+import jakarta.persistence.*; 
 
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "resource_requests")
-
-@AllArgsConstructor
+@Table(name = "resource_requests") 
 public class ResourceRequest {
 
     @Id
