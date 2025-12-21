@@ -1,14 +1,12 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
-@AllArgsConstructor
-public class User {
+public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,11 +23,27 @@ public class User {
 
     private LocalDateTime createdAt;
 
-    public User(String fullName, String email, String role) {
+    @OneToMany(mappedBy = "requestedBy")
+    private List<ResourceRequest> resourceRequests;
+
+    public User() {
+    }
+
+    public User(String fullName, String email, String password, String role) {
         this.fullName = fullName;
         this.email = email;
-        this.role = role != null ? role : "USER";
-        this.createdAt = LocalDateTime.now();
+        this.password = password;
+        this.role = (role != null) ? role : "USER";
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        if (this.createdAt == null) {
+            this.createdAt = LocalDateTime.now();
+        }
+        if (this.role == null) {
+            this.role = "USER";
+        }
     }
 
     public Long getId() {
@@ -80,13 +94,11 @@ public class User {
         this.createdAt = createdAt;
     }
 
-    @PrePersist
-    protected void onCreate() {
-        if (createdAt == null) {
-            createdAt = LocalDateTime.now();
-        }
-        if (role == null) {
-            role = "USER";
-        }
+    public List<ResourceRequest> getResourceRequests() {
+        return resourceRequests;
+    }
+
+    public void setResourceRequests(List<ResourceRequest> resourceRequests) {
+        this.resourceRequests = resourceRequests;
     }
 }
