@@ -17,9 +17,11 @@ public class ResourceAllocationController {
     }
 
     @PostMapping("/auto/{requestId}")
-    public ResponseEntity<ResourceAllocation> autoAllocate(@PathVariable Long requestId) {
-        return ResponseEntity.ok(allocationService.autoAllocate(requestId));
-    }
+public ResponseEntity<Long> autoAllocate(@PathVariable Long requestId) {
+    ResourceAllocation allocation = allocationService.autoAllocate(requestId);
+    return ResponseEntity.ok(allocation.getId());
+}
+
 
     @GetMapping
     public ResponseEntity<List<ResourceAllocation>> getAllAllocations() {

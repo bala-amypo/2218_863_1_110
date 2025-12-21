@@ -30,30 +30,37 @@ public class ResourceAllocationServiceImpl implements ResourceAllocationService 
     }
 
     @Override
-    public ResourceAllocation autoAllocate(Long requestId) {
-        ResourceRequest request = requestRepository.findById(requestId)
-                .orElseThrow(() -> new ResourceNotFoundException("Request not found with id: " + requestId));
+public ResourceAllocation autoAllocate(Long requestId) {
 
-        List<Resource> resources = resourceRepository.findByResourceType(request.getResourceType());
+    ResourceRequest request = requestRepository.findById(requestId)
+            .orElseThrow(() ->
+                    new ResourceNotFoundException("Request not found with id: " + requestId));
 
-        if (resources.isEmpty()) {
-            throw new ResourceNotFoundException("No resources found for type: " + request.getResourceType());
-        }
-
-        Resource selectedResource = resources.get(0);
-
-        ResourceAllocation allocation = new ResourceAllocation();
-        allocation.setResource(selectedResource);
-        allocation.setRequest(request);
-        allocation.setConflictFlag(false);
-        allocation.setNotes("Auto-allocated");
-
-        request.setStatus("APPROVED");
-        requestRepository.save(request);
-
-        return allocationRepository.save(allocation);
+    if (request.getResourceType() == null) {
+        throw new IllegalArgumentException("Resource type is required for allocation");
     }
 
+    List<Resource> resources =
+            resourceRepository.findByResourceType(request.getResourceType());
+
+    if (resources.isEmpty()) {
+        throw new ResourceNotFoundException(
+                "No resources found for type: " + request.getResourceType());
+    }
+
+    Resource selectedResource = resources.get(0);
+
+    ResourceAllocation allocation = new ResourceAllocation();
+    allocation.setResource(selectedResource);
+    allocation.setRequest(request);
+    allocation.setConflictFlag(false);
+    allocation.setNotes("Auto-allocated");
+
+    request.setStatus("APPROVED");
+    requestRepository.save(request);
+
+    return allocationRepository.save(allocation);
+}
     @Override
     public ResourceAllocation getAllocation(Long id) {
         return allocationRepository.findById(id)
