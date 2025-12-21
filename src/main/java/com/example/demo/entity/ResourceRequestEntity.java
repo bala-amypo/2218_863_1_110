@@ -27,10 +27,10 @@ public class ResourceRequestEntity {
     @OneToOne(mappedBy = "request")
     private ResourceAllocation allocation;
 
-    public ResourceRequest() {
+    public ResourceRequestEntity() {
     }
 
-    public ResourceRequest(String resourceType, User requestedBy, LocalDateTime startTime, LocalDateTime endTime,
+    public ResourceRequestEntity(String resourceType, User requestedBy, LocalDateTime startTime, LocalDateTime endTime,
             String purpose, String status) {
         this.resourceType = resourceType;
         this.requestedBy = requestedBy;

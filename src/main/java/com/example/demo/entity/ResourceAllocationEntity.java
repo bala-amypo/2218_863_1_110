@@ -25,10 +25,10 @@ public class ResourceAllocationEntity {
 
     private String notes;
 
-    public ResourceAllocation() {
+    public ResourceAllocationEntity() {
     }
 
-    public ResourceAllocation(Resource resource, ResourceRequest request, Boolean conflictFlag, String notes) {
+    public ResourceAllocationEntity(Resource resource, ResourceRequest request, Boolean conflictFlag, String notes) {
         this.resource = resource;
         this.request = request;
         this.conflictFlag = conflictFlag;

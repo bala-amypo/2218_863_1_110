@@ -27,10 +27,10 @@ public class ResourceEntity {
     @OneToMany(mappedBy = "resource")
     private List<ResourceAllocation> allocations;
 
-    public Resource() {
+    public ResourceEntity() {
     }
 
-    public Resource(String resourceName, String resourceType, Integer capacity, String location) {
+    public ResourceEntity(String resourceName, String resourceType, Integer capacity, String location) {
         this.resourceName = resourceName;
         this.resourceType = resourceType;
         this.capacity = capacity;

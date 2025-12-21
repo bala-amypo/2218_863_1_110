@@ -20,10 +20,10 @@ public class AllocationRuleEntity {
 
     private LocalDateTime createdAt;
 
-    public AllocationRule() {
+    public AllocationRuleEntity() {
     }
 
-    public AllocationRule(String ruleName, String ruleType, Integer priorityWeight) {
+    public AllocationRuleEntity(String ruleName, String ruleType, Integer priorityWeight) {
         this.ruleName = ruleName;
         this.ruleType = ruleType;
         this.priorityWeight = priorityWeight;
