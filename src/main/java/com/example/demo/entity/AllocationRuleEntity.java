@@ -1,13 +1,11 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "allocation_rules") 
-public class AllocationRule {
+@Table(name = "allocation_rules")
+public class AllocationRuleEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,10 +20,19 @@ public class AllocationRule {
 
     private LocalDateTime createdAt;
 
+    public AllocationRule() {
+    }
+
+    public AllocationRule(String ruleName, String ruleType, Integer priorityWeight) {
+        this.ruleName = ruleName;
+        this.ruleType = ruleType;
+        this.priorityWeight = priorityWeight;
+    }
+
     @PrePersist
     protected void onCreate() {
-        if (createdAt == null) {
-            createdAt = LocalDateTime.now();
+        if (this.createdAt == null) {
+            this.createdAt = LocalDateTime.now();
         }
     }
 
