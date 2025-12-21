@@ -16,10 +16,11 @@ public class ResourceRequestController {
         this.requestService = requestService;
     }
 
-    @PostMapping("/{userId}")
-    public ResponseEntity<ResourceRequest> createRequest(@PathVariable Long userId,
-            @RequestBody ResourceRequest request) {
-        return ResponseEntity.ok(requestService.createRequest(userId, request));
+    @PostMapping("/{id}")
+    public ResponseEntity<ResourceRequest> createUser(
+    @PathVariable Long id,
+    @RequestBody ResourceRequest request) {
+        return ResponseEntity.ok(requestService.createRequest(id, request));
     }
 
     @GetMapping("/user/{userId}")
