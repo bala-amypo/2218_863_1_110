@@ -15,7 +15,7 @@ import java.util.List;
 @Service
 public class ResourceAllocationServiceImpl implements ResourceAllocationService {
 
-   private final RequestRepository requestRepository;
+   private final ResourceRequestRepository requestRepository;
     private final ResourceRepository resourceRepository;
     private final AllocationRuleRepository allocationRepository;
 
