@@ -14,9 +14,17 @@ import java.util.List;
 @Service
 public class ResourceAllocationServiceImpl implements ResourceAllocationService {
 
-    private final ResourceRequestRepository requestRepository;
+   private final RequestRepository requestRepository;
     private final ResourceRepository resourceRepository;
-    private final ResourceAllocationRepository allocationRepository;
+    private final AllocationRepository allocationRepository;
+
+    public ResourceAllocationServiceImpl(RequestRepository requestRepository, 
+                                         ResourceRepository resourceRepository, 
+                                         AllocationRepository allocationRepository) {
+        this.requestRepository = requestRepository;
+        this.resourceRepository = resourceRepository;
+        this.allocationRepository = allocationRepository;
+    }
 
     @Override
     public ResourceAllocation autoAllocate(Long requestId) {
