@@ -3,7 +3,7 @@ package com.example.demo.service;
 import com.example.demo.entity.Resource;
 import java.util.List;
 
-public interface ResourceService {
+public interface Resource {
     Resource createResource(Resource resource);
 
     Resource getResource(Long id);
