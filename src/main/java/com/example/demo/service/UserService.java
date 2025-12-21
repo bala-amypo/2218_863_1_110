@@ -4,11 +4,10 @@ import com.example.demo.entity.User;
 import java.util.List;
 
 public interface UserService {
-    User registerUser(User user);
 
-    User getUser(Long id);
+    User createUser(User user);
 
     List<User> getAllUsers();
 
-    User authenticate(String email, String password);
+    User getUser(Long id);
 }
