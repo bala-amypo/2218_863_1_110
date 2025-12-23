@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.ApiResponse;
 import com.example.demo.entity.User;
 import com.example.demo.service.UserService;
 import org.springframework.http.ResponseEntity;
@@ -16,19 +17,20 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
- 
-    @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        return ResponseEntity.ok(userService.createUser(user));
+
+    @PostMapping("/register")
+    public ResponseEntity<ApiResponse> register(@RequestBody User user) {
+        User created = userService.registerUser(user);
+        return ResponseEntity.ok(new ApiResponse(true, "User registered successfully", created));
     }
- 
+
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
- 
+
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUser(@PathVariable Long id) {
+    public ResponseEntity<User> getUserById(@PathVariable Long id) {
         return ResponseEntity.ok(userService.getUser(id));
     }
 }

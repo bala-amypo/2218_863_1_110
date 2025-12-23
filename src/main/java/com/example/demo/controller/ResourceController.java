@@ -1,9 +1,11 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.ApiResponse;
 import com.example.demo.entity.Resource;
 import com.example.demo.service.ResourceService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -17,8 +19,9 @@ public class ResourceController {
     }
 
     @PostMapping
-    public ResponseEntity<Resource> createResource(@RequestBody Resource resource) {
-        return ResponseEntity.ok(resourceService.createResource(resource));
+    public ResponseEntity<ApiResponse> createResource(@RequestBody Resource resource) {
+        Resource created = resourceService.createResource(resource);
+        return ResponseEntity.ok(new ApiResponse(true, "Resource created successfully", created));
     }
 
     @GetMapping
@@ -27,7 +30,7 @@ public class ResourceController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Resource> getResource(@PathVariable Long id) {
+    public ResponseEntity<Resource> getResourceById(@PathVariable Long id) {
         return ResponseEntity.ok(resourceService.getResource(id));
     }
 }
