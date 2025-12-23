@@ -16,47 +16,47 @@ public class ResourceRequestServiceImpl implements ResourceRequestService {
     private final ResourceRequestRepository requestRepository;
     private final UserRepository userRepository;
 
-    public ResourceRequestServiceImpl(ResourceRequestRepository requestRepository,
-                                      UserRepository userRepository) {
+    public ResourceRequestServiceImpl(ResourceRequestRepository requestRepository, UserRepository userRepository) {
         this.requestRepository = requestRepository;
         this.userRepository = userRepository;
     }
 
     @Override
     public ResourceRequest createRequest(Long userId, ResourceRequest request) {
-
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
 
-        if (request.getStartTime() != null && request.getEndTime() != null &&
-                request.getStartTime().isAfter(request.getEndTime())) {
-            throw new IllegalArgumentException("Invalid time range");
+        if (request.getStartTime().isAfter(request.getEndTime())) {
+            throw new IllegalArgumentException("Start time must be before end time");
         }
-
-        if (request.getPurpose() == null) {
-            throw new IllegalArgumentException("Purpose required");
+        if (request.getPurpose() == null || request.getPurpose().trim().isEmpty()) {
+            throw new IllegalArgumentException("Purpose is required");
         }
 
         request.setRequestedBy(user);
-        request.setStatus("PENDING");
+        // Status defaults to PENDING in Entity, or we can explicit here.
+        if (request.getStatus() == null) {
+            request.setStatus("PENDING");
+        }
 
         return requestRepository.save(request);
     }
 
     @Override
     public List<ResourceRequest> getRequestsByUser(Long userId) {
+        // Validation of user existence optional but good practice if required strictly.
+        // Prompt says "getRequestsByUser uses findByRequestedById."
         return requestRepository.findByRequestedById(userId);
     }
 
     @Override
     public ResourceRequest getRequest(Long id) {
         return requestRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Request not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Request not found with id: " + id));
     }
 
     @Override
     public ResourceRequest updateRequestStatus(Long requestId, String status) {
-
         ResourceRequest request = getRequest(requestId);
         request.setStatus(status);
         return requestRepository.save(request);

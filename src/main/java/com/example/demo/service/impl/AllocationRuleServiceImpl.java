@@ -4,23 +4,23 @@ import com.example.demo.entity.AllocationRule;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.AllocationRuleRepository;
 import com.example.demo.service.AllocationRuleService;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
-@AllArgsConstructor
 public class AllocationRuleServiceImpl implements AllocationRuleService {
 
     private final AllocationRuleRepository ruleRepository;
 
+    public AllocationRuleServiceImpl(AllocationRuleRepository ruleRepository) {
+        this.ruleRepository = ruleRepository;
+    }
+
     @Override
     public AllocationRule createRule(AllocationRule rule) {
         if (ruleRepository.existsByRuleName(rule.getRuleName())) {
-            throw new IllegalArgumentException("Rule with name " + rule.getRuleName() + " already exists");
-        }
-        if (rule.getPriorityWeight() != null && rule.getPriorityWeight() < 0) {
-            throw new IllegalArgumentException("Priority weight must be >= 0");
+            throw new IllegalArgumentException("AllocationRule exists with name: " + rule.getRuleName());
         }
         return ruleRepository.save(rule);
     }
@@ -28,7 +28,7 @@ public class AllocationRuleServiceImpl implements AllocationRuleService {
     @Override
     public AllocationRule getRule(Long id) {
         return ruleRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Rule not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("AllocationRule not found with id: " + id));
     }
 
     @Override
