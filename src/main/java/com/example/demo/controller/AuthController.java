@@ -11,37 +11,26 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 public class AuthController {
 
     private final UserService userService;
-    private final JwtUtil jwtUtil;
-    private final PasswordEncoder passwordEncoder;
 
-    public AuthController(UserService userService, JwtUtil jwtUtil, PasswordEncoder passwordEncoder) {
+    public AuthController(UserService userService) {
         this.userService = userService;
-        this.jwtUtil = jwtUtil;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse> register(@RequestBody User user) {
-       
-        User created = userService.registerUser(user);
-        return ResponseEntity.ok(new ApiResponse(true, "User registered successfully", created));
+    public ResponseEntity<User> register(@RequestBody User user) {
+        return ResponseEntity.ok(userService.createUser(user));
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) { 
-        User user = userService.getAllUsers().stream()
-                .filter(u -> u.getEmail().equals(request.getEmail()))  
-        .orElseThrow(() -> new IllegalArgumentException("User not found"));  
-        
-        if (user == null || !passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new IllegalArgumentException("Invalid credentials");
-        }
-
-        String token = jwtUtil.generateToken(user.getId(), user.getEmail(), user.getRole());
-        return ResponseEntity.ok(new AuthResponse(token, user.getId(), user.getEmail(), user.getRole()));
+    @GetMapping("/first-user")
+    public ResponseEntity<User> getFirstUser() {
+        User user = userService.getAllUsers()
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("No users found"));
+        return ResponseEntity.ok(user);
     }
 }
