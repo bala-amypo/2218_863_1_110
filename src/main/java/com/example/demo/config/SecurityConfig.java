@@ -42,7 +42,7 @@ public class SecurityConfig {
         )
 
         .formLogin(form -> form
-            .defaultSuccessUrl("/swagger-ui/index.html", true) // ✅ SWAGGER DEFAULT
+            .defaultSuccessUrl("/swagger-ui/index.html", true) 
             .permitAll()
         )
 
