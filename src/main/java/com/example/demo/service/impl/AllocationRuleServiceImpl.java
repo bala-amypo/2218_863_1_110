@@ -28,9 +28,9 @@ public class AllocationRuleServiceImpl implements AllocationRuleService {
     public AllocationRule getRule(Long id) {
         return repo.findById(id).orElseThrow();
     }
+@Override
+public List<AllocationRule> getAllRules() {
+    return repo.findAll();
+}
 
-    @Override
-    public List<AllocationRule> getAllRules() {
-        return repo.findAll();
-    }
 }

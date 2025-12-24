@@ -54,9 +54,9 @@ public class ResourceAllocationServiceImpl implements ResourceAllocationService 
     public ResourceAllocation getAllocation(Long id) {
         return allocationRepo.findById(id).orElseThrow();
     }
+@Override
+public List<ResourceAllocation> getAllAllocations() {
+    return allocationRepo.findAll();
+}
 
-    @Override
-    public List<ResourceAllocation> getAllAllocations() {
-        return allocationRepo.findAll();
-    }
 }
