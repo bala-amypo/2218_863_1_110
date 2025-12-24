@@ -1,26 +1,33 @@
-package com.example.demo.service;
+package com.example.demo.controller;
 
 import com.example.demo.entity.AllocationRule;
-import com.example.demo.repository.AllocationRuleRepository;
-import org.springframework.stereotype.Service;
+import com.example.demo.service.AllocationRuleService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
-@Service
-public class AllocationRuleService {
-    private final AllocationRuleRepository ruleRepository;
+@RestController
+@RequestMapping("/api/rules")
+public class AllocationRuleController {
 
-    public AllocationRuleService(AllocationRuleRepository ruleRepository) {
-        this.ruleRepository = ruleRepository;
-    }
+    private final AllocationRuleService ruleService;
 
-    public AllocationRule createRule(AllocationRule rule) {
-        if (ruleRepository.existsByRuleName(rule.getRuleName())) {
-            throw new RuntimeException("Rule name exists");
-        }
-        return ruleRepository.save(rule);
-    }
+    public AllocationRuleController(AllocationRuleService ruleService) {
+        this.ruleService = ruleService;
+    } 
     
-    public AllocationRule getRule(Long id) {
-        return ruleRepository.findById(id).orElseThrow(() -> new RuntimeException("Rule not found"));
+    @PostMapping("/")
+    public ResponseEntity<AllocationRule> createRule(@RequestBody AllocationRule rule) {
+        return ResponseEntity.ok(ruleService.createRule(rule));
     }
-    public java.util.List<AllocationRule> getAllRules() { return ruleRepository.findAll(); }
+ 
+    @GetMapping("/")
+    public ResponseEntity<List<AllocationRule>> getAllRules() {
+        return ResponseEntity.ok(ruleService.getAllRules());
+    }
+ 
+    @GetMapping("/{id}")
+    public ResponseEntity<AllocationRule> getRule(@PathVariable Long id) {
+        return ResponseEntity.ok(ruleService.getRule(id));
+    }
 }

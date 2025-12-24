@@ -1,44 +1,38 @@
-package com.example.demo.service;
+package com.example.demo.controller;
 
 import com.example.demo.entity.ResourceRequest;
-import com.example.demo.entity.User;
-import com.example.demo.repository.ResourceRequestRepository;
-import com.example.demo.repository.UserRepository;
-import org.springframework.stereotype.Service;
+import com.example.demo.service.ResourceRequestService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
-@Service
-public class ResourceRequestService {
-    private final ResourceRequestRepository requestRepository;
-    private final UserRepository userRepository;
+@RestController
+@RequestMapping("/api/requests")
+public class ResourceRequestController {
 
-    // Exact order required
-    public ResourceRequestService(ResourceRequestRepository requestRepository, UserRepository userRepository) {
-        this.requestRepository = requestRepository;
-        this.userRepository = userRepository;
+    private final ResourceRequestService requestService;
+
+    public ResourceRequestController(ResourceRequestService requestService) {
+        this.requestService = requestService;
     }
-
-    public ResourceRequest createRequest(Long userId, ResourceRequest request) {
-        if (request.getStartTime().isAfter(request.getEndTime())) {
-            throw new RuntimeException("Start time must be before end time");
-        }
-        User user = userRepository.findById(userId)
-            .orElseThrow(() -> new RuntimeException("User not found"));
-        request.setRequestedBy(user);
-        request.setStatus("PENDING");
-        return requestRepository.save(request);
+ 
+    @PostMapping("/{userId}")
+    public ResponseEntity<ResourceRequest> createRequest(@PathVariable Long userId, @RequestBody ResourceRequest request) {
+        return ResponseEntity.ok(requestService.createRequest(userId, request));
     }
-
-    public java.util.List<ResourceRequest> getRequestsByUser(Long userId) {
-        return requestRepository.findByRequestedBy_Id(userId);
+ 
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<ResourceRequest>> getRequestsByUser(@PathVariable Long userId) {
+        return ResponseEntity.ok(requestService.getRequestsByUser(userId));
     }
-    
-    public ResourceRequest getRequest(Long id) {
-        return requestRepository.findById(id).orElseThrow(() -> new RuntimeException("Request not found"));
+ 
+    @GetMapping("/{id}")
+    public ResponseEntity<ResourceRequest> getRequest(@PathVariable Long id) {
+        return ResponseEntity.ok(requestService.getRequest(id));
     }
-
-    public ResourceRequest updateRequestStatus(Long requestId, String status) {
-        ResourceRequest req = getRequest(requestId);
-        req.setStatus(status);
-        return requestRepository.save(req);
+ 
+    @PutMapping("/status/{requestId}")
+    public ResponseEntity<ResourceRequest> updateStatus(@PathVariable Long requestId, @RequestBody String status) {
+        return ResponseEntity.ok(requestService.updateRequestStatus(requestId, status));
     }
 }

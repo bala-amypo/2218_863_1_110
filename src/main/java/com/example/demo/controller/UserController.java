@@ -15,20 +15,17 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
-
-    // Endpoint: POST /api/users/register
+ 
     @PostMapping("/register")
     public ResponseEntity<User> registerUser(@RequestBody User user) {
         return ResponseEntity.ok(userService.registerUser(user));
     }
-
-    // Endpoint: GET /api/users/
+ 
     @GetMapping("/")
     public ResponseEntity<List<User>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
-
-    // Endpoint: GET /api/users/{id}
+ 
     @GetMapping("/{id}")
     public ResponseEntity<User> getUser(@PathVariable Long id) {
         return ResponseEntity.ok(userService.getUser(id));
