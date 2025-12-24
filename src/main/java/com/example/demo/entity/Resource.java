@@ -3,23 +3,20 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 @Entity
-public class ResourceRequest {
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = "resourceName"))
+public class Resource {
 
     @Id @GeneratedValue
     private Long id;
 
+    private String resourceName;
     private String resourceType;
-
-    @ManyToOne
-    private User requestedBy;
-
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
-    private String purpose;
-    private String status;
+    private Integer capacity;
+    private String location;
+    private LocalDateTime createdAt;
 
     @PrePersist
     void onCreate() {
-        if (status == null) status = "PENDING";
+        createdAt = LocalDateTime.now();
     }
 }
