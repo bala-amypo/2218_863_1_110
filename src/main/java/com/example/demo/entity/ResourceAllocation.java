@@ -29,5 +29,13 @@ public class ResourceAllocation {
     public ResourceRequest getRequest() { return request; }
     public void setRequest(ResourceRequest request) { this.request = request; }
     public Boolean getConflictFlag() { return conflictFlag; }
-    public void setConflictFlag(Boolean conflictFlag) { this.conflictFlag = conflictFlag; }
+    public void setConflictFlag(Boolean conflictFlag) { this.conflictFlag = conflictFlag; } 
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
 }
