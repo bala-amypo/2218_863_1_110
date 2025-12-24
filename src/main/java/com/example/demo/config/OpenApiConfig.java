@@ -10,16 +10,16 @@ import org.springframework.context.annotation.Configuration;
 import java.util.List;
 
 @Configuration
-public class OpenApiConfig {
+public class OpenApiConfig { // Class name MUST be OpenApiConfig
 
     @Bean
     public OpenAPI customOpenAPI() {
         final String securitySchemeName = "bearerAuth";
         
-        return new OpenAPI() 
+        return new OpenAPI()
                 .servers(List.of(
-                        new Server().url("https://9109.32procr.amypo.ai/")
-                )) 
+                        new Server().url("https://9109.32procr.amypo.ai/") // Your URL
+                ))
                 .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
                 .components(new Components()
                         .addSecuritySchemes(securitySchemeName,
