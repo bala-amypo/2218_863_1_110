@@ -20,8 +20,8 @@ public class User {
         if (role == null) role = "USER";
         createdAt = LocalDateTime.now();
     }
-public User(String name, String email, String password, String role) {
-    this.name = name;
+public User(String fullname, String email, String password, String role) {
+    this.fullname = name;
     this.email = email;
     this.password = password;
     this.role = role;

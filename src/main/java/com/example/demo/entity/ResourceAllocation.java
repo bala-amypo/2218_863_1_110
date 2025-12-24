@@ -31,6 +31,15 @@ public class ResourceAllocation {
     public Boolean getConflictFlag() { return conflictFlag; }
     public void setConflictFlag(Boolean conflictFlag) { this.conflictFlag = conflictFlag; } 
 
+ 
+
+    public LocalDateTime getAllocatedAt() {
+        return allocatedAt;
+    }
+
+    public void setAllocatedAt(LocalDateTime allocatedAt) {
+        this.allocatedAt = allocatedAt;
+    }
     public String getNotes() {
         return notes;
     }
