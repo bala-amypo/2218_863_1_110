@@ -21,7 +21,7 @@ public class User {
         createdAt = LocalDateTime.now();
     }
 public User(String fullname, String email, String password, String role) {
-    this.fullname = name;
+    this.fullName = fullname;
     this.email = email;
     this.password = password;
     this.role = role;
