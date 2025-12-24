@@ -69,6 +69,9 @@ public class ResourceRequest {
     public void setPurpose(String purpose) {
         this.purpose = purpose;
     }
+    public void setId(Long id) {
+    this.id = id;
+}
 
     public String getStatus() {
         return status;
