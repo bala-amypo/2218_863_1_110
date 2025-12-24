@@ -27,7 +27,7 @@ public class SecurityConfig {
                 // Allow Auth endpoints
                 .requestMatchers("/auth/**").permitAll()
                 // Allow Swagger UI and API Docs
-                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
+                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html","/").permitAll()
                 // Allow the Hello Servlet
                 .requestMatchers("/hello").permitAll()
                 // Protect everything else
