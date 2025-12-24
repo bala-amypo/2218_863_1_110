@@ -1,42 +1,28 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "allocation_rules")
-@Getter
-@Setter
 public class AllocationRule {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(unique = true, nullable = false)
+    @Column(unique = true)
     private String ruleName;
-
-    private String ruleType; // "FIRSTAVAILABLE", "PRIORITYBASED", "ROUNDROBIN"
-
-    @Column(nullable = false)
+    private String ruleType; // FIRST_AVAILABLE, etc.
     private Integer priorityWeight;
-
     private LocalDateTime createdAt;
 
     @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-    }
+    protected void onCreate() { createdAt = LocalDateTime.now(); }
 
-    public AllocationRule() {
-    }
-
-    public AllocationRule(String ruleName, String ruleType, Integer priorityWeight) {
-        this.ruleName = ruleName;
-        this.ruleType = ruleType;
-        this.priorityWeight = priorityWeight;
-    }
+    // Getters and Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    public String getRuleName() { return ruleName; }
+    public void setRuleName(String ruleName) { this.ruleName = ruleName; }
+    public String getRuleType() { return ruleType; }
+    public void setRuleType(String ruleType) { this.ruleType = ruleType; }
+    public Integer getPriorityWeight() { return priorityWeight; }
+    public void setPriorityWeight(Integer priorityWeight) { this.priorityWeight = priorityWeight; }
 }
