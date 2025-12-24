@@ -20,8 +20,13 @@ public class User {
         if (role == null) role = "USER";
         createdAt = LocalDateTime.now();
     }
+public User(String name, String email, String password, String role) {
+    this.name = name;
+    this.email = email;
+    this.password = password;
+    this.role = role;
+}
 
-    // Getters and Setters (Omitted for brevity, but required)
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public String getEmail() { return email; }
