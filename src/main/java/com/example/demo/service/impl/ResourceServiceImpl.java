@@ -11,27 +11,17 @@ public class ResourceServiceImpl implements ResourceService {
 
     private final ResourceRepository resourceRepository;
 
-    // Strict Constructor Injection
     public ResourceServiceImpl(ResourceRepository resourceRepository) {
         this.resourceRepository = resourceRepository;
     }
 
-    @Override
     public Resource createResource(Resource resource) {
         if (resourceRepository.existsByResourceName(resource.getResourceName())) {
-            throw new RuntimeException("Resource name already exists");
+            throw new RuntimeException("resource exists");
+        }
+        if (resource.getCapacity() < 1) {
+            throw new RuntimeException("capacity invalid");
         }
         return resourceRepository.save(resource);
-    }
-
-    @Override
-    public Resource getResource(Long id) {
-        return resourceRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Resource not found"));
-    }
-
-    @Override
-    public List<Resource> getAllResources() {
-        return resourceRepository.findAll();
     }
 }
