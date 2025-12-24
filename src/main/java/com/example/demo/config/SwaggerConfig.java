@@ -10,13 +10,14 @@ import org.springframework.context.annotation.Configuration;
 import java.util.List;
 
 @Configuration
-public class OpenApiConfig {
+public class SwaggerConfig {   
 
     @Bean
     public OpenAPI customOpenAPI() {
         final String securitySchemeName = "bearerAuth";
         
-        return new OpenAPI() 
+        return new OpenAPI()
+                // 1. Your specific Cloud/Amypo Server URL
                 .servers(List.of(
                         new Server().url("https://9109.32procr.amypo.ai/")
                 )) 
