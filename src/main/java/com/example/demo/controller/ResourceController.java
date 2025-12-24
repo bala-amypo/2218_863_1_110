@@ -1,27 +1,30 @@
-package com.example.demo.service;
+package com.example.demo.controller;
 
 import com.example.demo.entity.Resource;
-import com.example.demo.repository.ResourceRepository;
-import org.springframework.stereotype.Service;
+import com.example.demo.service.ResourceService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
-@Service
-public class ResourceService {
-    private final ResourceRepository resourceRepository;
+@RestController
+@RequestMapping("/api/resources")
+public class ResourceController {
+    private final ResourceService service;
 
-    public ResourceService(ResourceRepository resourceRepository) {
-        this.resourceRepository = resourceRepository;
+    public ResourceController(ResourceService service) { this.service = service; }
+
+    @PostMapping
+    public ResponseEntity<Resource> create(@RequestBody Resource resource) {
+        return ResponseEntity.ok(service.createResource(resource));
     }
 
-    public Resource createResource(Resource resource) {
-        if (resourceRepository.existsByResourceName(resource.getResourceName())) {
-            throw new RuntimeException("Resource name already exists");
-        }
-        return resourceRepository.save(resource);
-    }
-
-    public Resource getResource(Long id) {
-        return resourceRepository.findById(id).orElseThrow(() -> new RuntimeException("Resource not found"));
+    @GetMapping
+    public ResponseEntity<List<Resource>> getAll() {
+        return ResponseEntity.ok(service.getAllResources());
     }
     
-    public java.util.List<Resource> getAllResources() { return resourceRepository.findAll(); }
+    @GetMapping("/{id}")
+    public ResponseEntity<Resource> get(@PathVariable Long id) {
+        return ResponseEntity.ok(service.getResource(id));
+    }
 }
