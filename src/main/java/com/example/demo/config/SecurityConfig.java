@@ -3,14 +3,9 @@ package com.example.demo.config;
 import com.example.demo.security.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -27,41 +22,19 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-        .csrf(csrf -> csrf.disable())
-
-        .authorizeHttpRequests(auth -> auth
-            .requestMatchers(
-                "/auth/register",
-                "/auth/login",
-                "/hello",
-                "/swagger-ui/**",
-                "/v3/api-docs/**"
-            ).permitAll()
-            .requestMatchers("/api/**").authenticated()
-            .anyRequest().authenticated()
-        )
-
-        .formLogin(form -> form
-            .defaultSuccessUrl("/swagger-ui/index.html", true) 
-            .permitAll()
-        )
-
-        .logout(logout -> logout
-            .logoutSuccessUrl("/swagger-ui/index.html")
-        )
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+            .csrf(AbstractHttpConfigurer::disable)
+            .authorizeHttpRequests(auth -> auth
+                // Allow Auth endpoints
+                .requestMatchers("/auth/**").permitAll()
+                // Allow Swagger UI and API Docs
+                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
+                // Allow the Hello Servlet
+                .requestMatchers("/hello").permitAll()
+                // Protect everything else
+                .anyRequest().authenticated()
+            )
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
-            throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
     }
 }
