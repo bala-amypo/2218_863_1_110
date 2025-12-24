@@ -19,8 +19,7 @@ public class OpenApiConfig {
         return new OpenAPI() 
                 .servers(List.of(
                         new Server().url("https://9109.32procr.amypo.ai/")
-                ))
-                // 2. JWT Security Configuration (Required for the "Authorize" button)
+                )) 
                 .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
                 .components(new Components()
                         .addSecuritySchemes(securitySchemeName,
