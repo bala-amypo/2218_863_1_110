@@ -1,36 +1,27 @@
-package com.example.demo.controller;
+package com.example.demo.service;
 
-import com.example.demo.dto.ApiResponse;
 import com.example.demo.entity.Resource;
-import com.example.demo.service.ResourceService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import com.example.demo.repository.ResourceRepository;
+import org.springframework.stereotype.Service;
 
-import java.util.List;
+@Service
+public class ResourceService {
+    private final ResourceRepository resourceRepository;
 
-@RestController
-@RequestMapping("/api/resources")
-public class ResourceController {
-
-    private final ResourceService resourceService;
-
-    public ResourceController(ResourceService resourceService) {
-        this.resourceService = resourceService;
+    public ResourceService(ResourceRepository resourceRepository) {
+        this.resourceRepository = resourceRepository;
     }
 
-    @PostMapping
-    public ResponseEntity<ApiResponse> createResource(@RequestBody Resource resource) {
-        Resource created = resourceService.createResource(resource);
-        return ResponseEntity.ok(new ApiResponse(true, "Resource created successfully", created));
+    public Resource createResource(Resource resource) {
+        if (resourceRepository.existsByResourceName(resource.getResourceName())) {
+            throw new RuntimeException("Resource name already exists");
+        }
+        return resourceRepository.save(resource);
     }
 
-    @GetMapping
-    public ResponseEntity<List<Resource>> getAllResources() {
-        return ResponseEntity.ok(resourceService.getAllResources());
+    public Resource getResource(Long id) {
+        return resourceRepository.findById(id).orElseThrow(() -> new RuntimeException("Resource not found"));
     }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Resource> getResourceById(@PathVariable Long id) {
-        return ResponseEntity.ok(resourceService.getResource(id));
-    }
+    
+    public java.util.List<Resource> getAllResources() { return resourceRepository.findAll(); }
 }

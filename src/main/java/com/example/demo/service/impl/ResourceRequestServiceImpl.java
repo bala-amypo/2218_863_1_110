@@ -2,12 +2,10 @@ package com.example.demo.service.impl;
 
 import com.example.demo.entity.ResourceRequest;
 import com.example.demo.entity.User;
-import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.ResourceRequestRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.ResourceRequestService;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -16,6 +14,7 @@ public class ResourceRequestServiceImpl implements ResourceRequestService {
     private final ResourceRequestRepository requestRepository;
     private final UserRepository userRepository;
 
+    // Strict Constructor Order: (ResourceRequestRepository, UserRepository)
     public ResourceRequestServiceImpl(ResourceRequestRepository requestRepository, UserRepository userRepository) {
         this.requestRepository = requestRepository;
         this.userRepository = userRepository;
@@ -23,42 +22,32 @@ public class ResourceRequestServiceImpl implements ResourceRequestService {
 
     @Override
     public ResourceRequest createRequest(Long userId, ResourceRequest request) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
-
         if (request.getStartTime().isAfter(request.getEndTime())) {
-            throw new IllegalArgumentException("Start time must be before end time");
+            throw new RuntimeException("Start time must be before end time");
         }
-        if (request.getPurpose() == null || request.getPurpose().trim().isEmpty()) {
-            throw new IllegalArgumentException("Purpose is required");
-        }
-
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new RuntimeException("User not found"));
+        
         request.setRequestedBy(user);
-        // Status defaults to PENDING in Entity, or we can explicit here.
-        if (request.getStatus() == null) {
-            request.setStatus("PENDING");
-        }
-
+        request.setStatus("PENDING");
         return requestRepository.save(request);
     }
 
     @Override
     public List<ResourceRequest> getRequestsByUser(Long userId) {
-        // Validation of user existence optional but good practice if required strictly.
-        // Prompt says "getRequestsByUser uses findByRequestedById."
-        return requestRepository.findByRequestedById(userId);
+        return requestRepository.findByRequestedBy_Id(userId);
     }
 
     @Override
     public ResourceRequest getRequest(Long id) {
         return requestRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Request not found with id: " + id));
+            .orElseThrow(() -> new RuntimeException("Request not found"));
     }
 
     @Override
     public ResourceRequest updateRequestStatus(Long requestId, String status) {
-        ResourceRequest request = getRequest(requestId);
-        request.setStatus(status);
-        return requestRepository.save(request);
+        ResourceRequest req = getRequest(requestId);
+        req.setStatus(status);
+        return requestRepository.save(req);
     }
 }

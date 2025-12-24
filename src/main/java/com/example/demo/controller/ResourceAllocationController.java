@@ -1,36 +1,52 @@
-package com.example.demo.controller;
+package com.example.demo.service;
 
-import com.example.demo.dto.ApiResponse;
-import com.example.demo.entity.ResourceAllocation;
-import com.example.demo.service.ResourceAllocationService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
+import com.example.demo.entity.*;
+import com.example.demo.repository.*;
+import org.springframework.stereotype.Service;
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/allocations")
-public class ResourceAllocationController {
+@Service
+public class ResourceAllocationService {
+    private final ResourceRequestRepository requestRepository;
+    private final ResourceRepository resourceRepository;
+    private final ResourceAllocationRepository allocationRepository;
 
-    private final ResourceAllocationService allocationService;
-
-    public ResourceAllocationController(ResourceAllocationService allocationService) {
-        this.allocationService = allocationService;
+    // Exact order required
+    public ResourceAllocationService(ResourceRequestRepository requestRepository, 
+                                     ResourceRepository resourceRepository, 
+                                     ResourceAllocationRepository allocationRepository) {
+        this.requestRepository = requestRepository;
+        this.resourceRepository = resourceRepository;
+        this.allocationRepository = allocationRepository;
     }
 
-    @PostMapping("/auto/{requestId}")
-    public ResponseEntity<ApiResponse> autoAllocate(@PathVariable Long requestId) {
-        ResourceAllocation allocation = allocationService.autoAllocate(requestId);
-        return ResponseEntity.ok(new ApiResponse(true, "Resource allocated successfully", allocation));
+    public ResourceAllocation autoAllocate(Long requestId) {
+        ResourceRequest request = requestRepository.findById(requestId)
+            .orElseThrow(() -> new RuntimeException("Request not found"));
+         
+        List<Resource> resources = resourceRepository.findByResourceType(request.getResourceType());
+        
+        ResourceAllocation allocation = new ResourceAllocation();
+        allocation.setRequest(request);
+        
+        if (!resources.isEmpty()) { 
+            allocation.setResource(resources.get(0));
+            allocation.setConflictFlag(false);
+            allocation.setNotes("Auto allocated");
+            request.setStatus("APPROVED");
+        } else {
+            allocation.setConflictFlag(true);
+            allocation.setNotes("No resource available");
+            request.setStatus("REJECTED");
+        }
+        
+        requestRepository.save(request);
+        return allocationRepository.save(allocation);
     }
 
-    @GetMapping
-    public ResponseEntity<List<ResourceAllocation>> getAllAllocations() {
-        return ResponseEntity.ok(allocationService.getAllAllocations());
+    public ResourceAllocation getAllocation(Long id) {
+        return allocationRepository.findById(id).orElseThrow(() -> new RuntimeException("Not found"));
     }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<ResourceAllocation> getAllocationById(@PathVariable Long id) {
-        return ResponseEntity.ok(allocationService.getAllocation(id));
-    }
+    
+    public List<ResourceAllocation> getAllAllocations() { return allocationRepository.findAll(); }
 }

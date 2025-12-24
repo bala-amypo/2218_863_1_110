@@ -1,36 +1,26 @@
-package com.example.demo.controller;
+package com.example.demo.service;
 
-import com.example.demo.dto.ApiResponse;
 import com.example.demo.entity.AllocationRule;
-import com.example.demo.service.AllocationRuleService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import com.example.demo.repository.AllocationRuleRepository;
+import org.springframework.stereotype.Service;
 
-import java.util.List;
+@Service
+public class AllocationRuleService {
+    private final AllocationRuleRepository ruleRepository;
 
-@RestController
-@RequestMapping("/api/rules")
-public class AllocationRuleController {
-
-    private final AllocationRuleService ruleService;
-
-    public AllocationRuleController(AllocationRuleService ruleService) {
-        this.ruleService = ruleService;
+    public AllocationRuleService(AllocationRuleRepository ruleRepository) {
+        this.ruleRepository = ruleRepository;
     }
 
-    @PostMapping
-    public ResponseEntity<ApiResponse> createRule(@RequestBody AllocationRule rule) {
-        AllocationRule created = ruleService.createRule(rule);
-        return ResponseEntity.ok(new ApiResponse(true, "Rule created successfully", created));
+    public AllocationRule createRule(AllocationRule rule) {
+        if (ruleRepository.existsByRuleName(rule.getRuleName())) {
+            throw new RuntimeException("Rule name exists");
+        }
+        return ruleRepository.save(rule);
     }
-
-    @GetMapping
-    public ResponseEntity<List<AllocationRule>> getAllRules() {
-        return ResponseEntity.ok(ruleService.getAllRules());
+    
+    public AllocationRule getRule(Long id) {
+        return ruleRepository.findById(id).orElseThrow(() -> new RuntimeException("Rule not found"));
     }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<AllocationRule> getRuleById(@PathVariable Long id) {
-        return ResponseEntity.ok(ruleService.getRule(id));
-    }
+    public java.util.List<AllocationRule> getAllRules() { return ruleRepository.findAll(); }
 }
