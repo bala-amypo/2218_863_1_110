@@ -1,65 +1,46 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
 
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = "resourceName"))
+@Table(name = "resources")
+@Getter
+@Setter
 public class Resource {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true, nullable = false)
     private String resourceName;
+
+    @Column(nullable = false)
     private String resourceType;
+
+    @Column(nullable = false)
     private Integer capacity;
+
     private String location;
+
     private LocalDateTime createdAt;
 
     @PrePersist
-    void onCreate() {
-        createdAt = LocalDateTime.now();
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
     }
 
-    // ✅ GETTERS & SETTERS
-    public Long getId() {
-        return id;
+    public Resource() {
     }
 
-    public String getResourceName() {
-        return resourceName;
-    }
-
-    public void setResourceName(String resourceName) {
+    public Resource(String resourceName, String resourceType, Integer capacity, String location) {
         this.resourceName = resourceName;
-    }
-
-    public String getResourceType() {
-        return resourceType;
-    }
-
-    public void setResourceType(String resourceType) {
         this.resourceType = resourceType;
-    }
-
-    public Integer getCapacity() {
-        return capacity;
-    }
-
-    public void setCapacity(Integer capacity) {
         this.capacity = capacity;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
         this.location = location;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
     }
 }
