@@ -7,16 +7,13 @@ public class AuthResponse {
     private String email;
     private String role;
 
-    // Required by Jackson
     public AuthResponse() {
     }
 
-    // ✅ ADD THIS CONSTRUCTOR (FIXES ERROR)
     public AuthResponse(String token) {
         this.token = token;
     }
 
-    // Existing constructor (keep it)
     public AuthResponse(String token, Long userId, String email, String role) {
         this.token = token;
         this.userId = userId;
