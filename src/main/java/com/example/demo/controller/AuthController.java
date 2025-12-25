@@ -37,10 +37,10 @@ public class AuthController {
                 .filter(u -> u.getEmail().equals(request.getEmail())) /
                 .findFirst()
                 .orElse(null);  
-        .orElseThrow(() -> new IllegalArgumentException("User not found")); // Or similar
+        .orElseThrow(() -> new IllegalArgumentException("User not found")); // Or 
         
         if (user == null || !passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new IllegalArgumentException("Invalid credentials");
+            throw new IllegalArgumentException("Invalid credentials");similar
         }
 
         String token = jwtUtil.generateToken(user.getId(), user.getEmail(), user.getRole());

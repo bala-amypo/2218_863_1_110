@@ -1,37 +1,59 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.User;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository userRepo;
+    private final UserRepository userRepository;
 
-    public UserServiceImpl(UserRepository userRepo) {
-        this.userRepo = userRepo;
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
     public User registerUser(User user) {
-        if (userRepo.existsByEmail(user.getEmail())) {
-            throw new RuntimeException("email exists");
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new IllegalArgumentException("User exists with email: " + user.getEmail());
         }
-        return userRepo.save(user);
+
+    
+        user.setPassword(encode(user.getPassword()));
+        return userRepository.save(user);
+    }
+
+    private String encode(String raw) {
+        if (raw == null) return null;
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(raw.getBytes(StandardCharsets.UTF_8));
+            StringBuilder sb = new StringBuilder();
+            for (byte b : hash) {
+                sb.append(String.format("%02x", b));
+            }
+            return sb.toString();
+        } catch (NoSuchAlgorithmException e) {
+            return new StringBuilder(raw).reverse().append("_enc").toString();
+        }
     }
 
     @Override
     public User getUser(Long id) {
-        return userRepo.findById(id).orElseThrow();
+        return userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
     }
 
     @Override
-public List<User> getAllUsers() {
-    return userRepo.findAll();
-}
-
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
 }
