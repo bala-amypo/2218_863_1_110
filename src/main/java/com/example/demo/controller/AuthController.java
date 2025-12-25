@@ -6,9 +6,10 @@ import com.example.demo.dto.AuthResponse;
 import com.example.demo.entity.User;
 import com.example.demo.security.JwtUtil;
 import com.example.demo.service.UserService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 
 @RestController
 @RequestMapping("/auth")
@@ -16,33 +17,57 @@ public class AuthController {
 
     private final UserService userService;
     private final JwtUtil jwtUtil;
-    private final PasswordEncoder passwordEncoder;
 
-    public AuthController(UserService userService, JwtUtil jwtUtil, PasswordEncoder passwordEncoder) {
+    // ✅ Constructor injection
+    public AuthController(UserService userService, JwtUtil jwtUtil) {
         this.userService = userService;
         this.jwtUtil = jwtUtil;
-        this.passwordEncoder = passwordEncoder;
     }
 
+    // ================= REGISTER =================
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse> register(@RequestBody User user) {
-        // Prompt calls for user registration data to map to userService.registerUser
+    public ApiResponse register(@RequestBody User user) {
         User created = userService.registerUser(user);
-        return ResponseEntity.ok(new ApiResponse(true, "User registered successfully", created));
+        return new ApiResponse(true, "User registered successfully", created);
     }
 
+    // ================= LOGIN =================
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) { 
-        User user = userService.getAllUsers().stream()
-                .filter(u -> u.getEmail().equals(request.getEmail())) 
-                .findFirst() 
-        .orElseThrow(() -> new IllegalArgumentException("User not found")); 
-        
-        if (user == null || !passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new IllegalArgumentException("Invalid credentials");
-        }
+    public AuthResponse login(@RequestBody AuthRequest request) {
 
-        String token = jwtUtil.generateToken(user.getId(), user.getEmail(), user.getRole());
-        return ResponseEntity.ok(new AuthResponse(token, user.getId(), user.getEmail(), user.getRole()));
+        // 1️⃣ Find user by email
+        User user = userService.getAllUsers().stream()
+                .filter(u -> u.getEmail().equals(request.getEmail()))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Invalid credentials"));
+ 
+        String encodedInput = encode(request.getPassword());
+ 
+        if (!encodedInput.equals(user.getPassword())) {
+            throw new RuntimeException("Invalid credentials");
+        }
+ 
+        String token = jwtUtil.generateToken(
+                user.getId(),
+                user.getEmail(),
+                user.getRole()
+        );
+
+        return new AuthResponse(token);
+    }
+ 
+    private String encode(String raw) {
+        if (raw == null) return null;
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(raw.getBytes(StandardCharsets.UTF_8));
+            StringBuilder sb = new StringBuilder();
+            for (byte b : hash) {
+                sb.append(String.format("%02x", b));
+            }
+            return sb.toString();
+        } catch (Exception e) {
+            return raw;
+        }
     }
 }
