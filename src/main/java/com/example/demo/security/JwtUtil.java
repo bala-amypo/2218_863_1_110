@@ -13,7 +13,7 @@ public class JwtUtil {
     private final Key key;
     private final long validityInMs;
 
-    // Constructor used directly by tests
+
     public JwtUtil(String secretKey, long validityInMs) {
         this.key = Keys.hmacShaKeyFor(secretKey.getBytes());
         this.validityInMs = validityInMs;
