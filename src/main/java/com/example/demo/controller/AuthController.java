@@ -34,13 +34,12 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) { 
         User user = userService.getAllUsers().stream()
-                .filter(u -> u.getEmail().equals(request.getEmail())) /
-                .findFirst()
-                .orElse(null);  
-        .orElseThrow(() -> new IllegalArgumentException("User not found")); // Or 
+                .filter(u -> u.getEmail().equals(request.getEmail())) 
+                .findFirst() 
+        .orElseThrow(() -> new IllegalArgumentException("User not found")); 
         
         if (user == null || !passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new IllegalArgumentException("Invalid credentials");similar
+            throw new IllegalArgumentException("Invalid credentials");
         }
 
         String token = jwtUtil.generateToken(user.getId(), user.getEmail(), user.getRole());
