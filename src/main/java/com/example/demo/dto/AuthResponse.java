@@ -1,13 +1,21 @@
 package com.example.demo.dto;
 
 public class AuthResponse {
+
     private String token;
     private Long userId;
     private String email;
     private String role;
 
-    public AuthResponse() {}
+    public AuthResponse() {
+    }
 
+    // ✅ ADD THIS (FIXES YOUR ERROR)
+    public AuthResponse(String token) {
+        this.token = token;
+    }
+
+    // Existing constructor (keep it)
     public AuthResponse(String token, Long userId, String email, String role) {
         this.token = token;
         this.userId = userId;
