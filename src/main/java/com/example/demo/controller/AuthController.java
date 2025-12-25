@@ -17,25 +17,20 @@ public class AuthController {
 
     private final UserService userService;
     private final JwtUtil jwtUtil;
-
-    // ✅ Constructor injection
     public AuthController(UserService userService, JwtUtil jwtUtil) {
         this.userService = userService;
         this.jwtUtil = jwtUtil;
-    }
+    } 
 
-    // ================= REGISTER =================
     @PostMapping("/register")
     public ApiResponse register(@RequestBody User user) {
         User created = userService.registerUser(user);
         return new ApiResponse(true, "User registered successfully", created);
     }
-
-    // ================= LOGIN =================
+ 
     @PostMapping("/login")
     public AuthResponse login(@RequestBody AuthRequest request) {
-
-        // 1️⃣ Find user by email
+ 
         User user = userService.getAllUsers().stream()
                 .filter(u -> u.getEmail().equals(request.getEmail()))
                 .findFirst()
