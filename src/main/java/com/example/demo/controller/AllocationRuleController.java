@@ -1,7 +1,9 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.ApiResponse;
 import com.example.demo.entity.AllocationRule;
 import com.example.demo.service.AllocationRuleService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,24 +12,25 @@ import java.util.List;
 @RequestMapping("/api/rules")
 public class AllocationRuleController {
 
-    private final AllocationRuleService service;
+    private final AllocationRuleService ruleService;
 
-    public AllocationRuleController(AllocationRuleService service) {
-        this.service = service;
+    public AllocationRuleController(AllocationRuleService ruleService) {
+        this.ruleService = ruleService;
     }
 
     @PostMapping
-    public AllocationRule create(@RequestBody AllocationRule rule) {
-        return service.createRule(rule);
+    public ResponseEntity<ApiResponse> createRule(@RequestBody AllocationRule rule) {
+        AllocationRule created = ruleService.createRule(rule);
+        return ResponseEntity.ok(new ApiResponse(true, "Rule created successfully", created));
     }
 
     @GetMapping
-    public List<AllocationRule> all() {
-        return service.getAllRules();
+    public ResponseEntity<List<AllocationRule>> getAllRules() {
+        return ResponseEntity.ok(ruleService.getAllRules());
     }
 
     @GetMapping("/{id}")
-    public AllocationRule get(@PathVariable Long id) {
-        return service.getRule(id);
+    public ResponseEntity<AllocationRule> getRuleById(@PathVariable Long id) {
+        return ResponseEntity.ok(ruleService.getRule(id));
     }
 }

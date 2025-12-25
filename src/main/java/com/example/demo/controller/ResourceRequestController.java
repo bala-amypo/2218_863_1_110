@@ -1,7 +1,9 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.ApiResponse;
 import com.example.demo.entity.ResourceRequest;
 import com.example.demo.service.ResourceRequestService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,33 +12,31 @@ import java.util.List;
 @RequestMapping("/api/requests")
 public class ResourceRequestController {
 
-    private final ResourceRequestService service;
+    private final ResourceRequestService requestService;
 
-    public ResourceRequestController(ResourceRequestService service) {
-        this.service = service;
+    public ResourceRequestController(ResourceRequestService requestService) {
+        this.requestService = requestService;
     }
 
     @PostMapping("/{userId}")
-    public ResourceRequest create(
-            @PathVariable Long userId,
-            @RequestBody ResourceRequest request) {
-        return service.createRequest(userId, request);
+    public ResponseEntity<ApiResponse> createRequest(@PathVariable Long userId, @RequestBody ResourceRequest request) {
+        ResourceRequest created = requestService.createRequest(userId, request);
+        return ResponseEntity.ok(new ApiResponse(true, "Request created successfully", created));
     }
 
     @GetMapping("/user/{userId}")
-    public List<ResourceRequest> byUser(@PathVariable Long userId) {
-        return service.getRequestsByUser(userId);
+    public ResponseEntity<List<ResourceRequest>> getUserRequests(@PathVariable Long userId) {
+        return ResponseEntity.ok(requestService.getRequestsByUser(userId));
     }
 
     @GetMapping("/{id}")
-    public ResourceRequest get(@PathVariable Long id) {
-        return service.getRequest(id);
+    public ResponseEntity<ResourceRequest> getRequestById(@PathVariable Long id) {
+        return ResponseEntity.ok(requestService.getRequest(id));
     }
 
     @PutMapping("/status/{requestId}")
-    public ResourceRequest updateStatus(
-            @PathVariable Long requestId,
-            @RequestParam String status) {
-        return service.updateRequestStatus(requestId, status);
+    public ResponseEntity<ResourceRequest> updateStatus(@PathVariable Long requestId, @RequestParam String status) {
+        // Prompt asks for PUT /api/requests/status/{requestId} - matching strictly
+        return ResponseEntity.ok(requestService.updateRequestStatus(requestId, status));
     }
 }

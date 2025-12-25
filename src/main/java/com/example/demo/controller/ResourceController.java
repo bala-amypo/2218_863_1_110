@@ -1,7 +1,9 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.ApiResponse;
 import com.example.demo.entity.Resource;
 import com.example.demo.service.ResourceService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,24 +12,25 @@ import java.util.List;
 @RequestMapping("/api/resources")
 public class ResourceController {
 
-    private final ResourceService service;
+    private final ResourceService resourceService;
 
-    public ResourceController(ResourceService service) {
-        this.service = service;
+    public ResourceController(ResourceService resourceService) {
+        this.resourceService = resourceService;
     }
 
     @PostMapping
-    public Resource create(@RequestBody Resource resource) {
-        return service.createResource(resource);
+    public ResponseEntity<ApiResponse> createResource(@RequestBody Resource resource) {
+        Resource created = resourceService.createResource(resource);
+        return ResponseEntity.ok(new ApiResponse(true, "Resource created successfully", created));
     }
 
     @GetMapping
-    public List<Resource> all() {
-        return service.getAllResources();
+    public ResponseEntity<List<Resource>> getAllResources() {
+        return ResponseEntity.ok(resourceService.getAllResources());
     }
 
     @GetMapping("/{id}")
-    public Resource get(@PathVariable Long id) {
-        return service.getResource(id);
+    public ResponseEntity<Resource> getResourceById(@PathVariable Long id) {
+        return ResponseEntity.ok(resourceService.getResource(id));
     }
 }

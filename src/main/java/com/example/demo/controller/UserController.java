@@ -1,7 +1,9 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.ApiResponse;
 import com.example.demo.entity.User;
 import com.example.demo.service.UserService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,24 +12,25 @@ import java.util.List;
 @RequestMapping("/api/users")
 public class UserController {
 
-    private final UserService service;
+    private final UserService userService;
 
-    public UserController(UserService service) {
-        this.service = service;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     @PostMapping("/register")
-    public User register(@RequestBody User user) {
-        return service.registerUser(user);
+    public ResponseEntity<ApiResponse> register(@RequestBody User user) {
+        User created = userService.registerUser(user);
+        return ResponseEntity.ok(new ApiResponse(true, "User registered successfully", created));
     }
 
     @GetMapping
-    public List<User> all() {
-        return service.getAllUsers();
+    public ResponseEntity<List<User>> getAllUsers() {
+        return ResponseEntity.ok(userService.getAllUsers());
     }
 
     @GetMapping("/{id}")
-    public User get(@PathVariable Long id) {
-        return service.getUser(id);
+    public ResponseEntity<User> getUserById(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.getUser(id));
     }
 }
