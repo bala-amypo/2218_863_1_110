@@ -1,11 +1,13 @@
 package com.example.demo.dto;
 
 public class ApiResponse {
+
     private boolean success;
     private String message;
     private Object data;
 
-    public ApiResponse() {}
+    public ApiResponse() {
+    }
 
     public ApiResponse(boolean success, String message, Object data) {
         this.success = success;
