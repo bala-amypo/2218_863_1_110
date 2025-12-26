@@ -19,10 +19,20 @@ public class ResourceRequestController {
     }
 
     @PostMapping("/{userId}")
-    public ResponseEntity<ApiResponse> createRequest(@PathVariable Long userId, @RequestBody ResourceRequest request) {
-        ResourceRequest created = requestService.createRequest(userId, request);
-        return ResponseEntity.ok(new ApiResponse(true, "Request created successfully", created));
-    }
+public ResponseEntity<ApiResponse> createRequest(
+        @PathVariable Long userId,
+        @RequestBody com.example.demo.dto.ResourceRequestInputDto dto) {
+
+    ResourceRequest request = new ResourceRequest();
+    request.setResourceType(dto.getResourceType());
+    request.setStartTime(dto.getStartTime());
+    request.setEndTime(dto.getEndTime());
+    request.setPurpose(dto.getPurpose());
+
+    ResourceRequest created = requestService.createRequest(userId, request);
+    return ResponseEntity.ok(new ApiResponse(true, "Request created successfully", created));
+}
+
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<ResourceRequest>> getUserRequests(@PathVariable Long userId) {
