@@ -10,6 +10,7 @@ public class ResourceRequestInputDto {
     private String purpose;
 
     public ResourceRequestInputDto() {
+        
     }
 
     public String getResourceType() {
