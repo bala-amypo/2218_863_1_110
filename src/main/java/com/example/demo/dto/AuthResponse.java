@@ -7,8 +7,7 @@ public class AuthResponse {
     private String username;
     private String role;
 
-    public AuthResponse() {
-    }
+    public AuthResponse() {}
 
     public AuthResponse(String token) {
         this.token = token;
@@ -21,5 +20,19 @@ public class AuthResponse {
         this.role = role;
     }
 
-    // getters and setters
+    public String getToken() {
+        return token;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getRole() {
+        return role;
+    }
 }
