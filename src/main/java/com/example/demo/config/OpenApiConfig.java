@@ -17,7 +17,7 @@ public class OpenApiConfig {
         
         return new OpenAPI()
                 .servers(List.of(
-                        new Server().url("https://9109.32procr.amypo.ai") 
+                        new Server().url("https://9109.32procr.amypo.ai/") 
                 ))
                 .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
                 .components(new Components()
