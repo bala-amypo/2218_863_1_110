@@ -33,10 +33,7 @@ public class ResourceAllocationServiceImpl implements ResourceAllocationService 
                 .orElseThrow(() -> new ResourceNotFoundException("Request not found with id: " + requestId));
 
         if (!"APPROVED".equalsIgnoreCase(request.getStatus())) {
-            // "For a successful allocation, set... allocatedAt".
-            // Often allocation implies finding a slot.
-            // Prompt says "Find candidate resources using findByResourceType... if none
-            // throw exception".
+           
         }
 
         List<Resource> candidates = resourceRepository.findByResourceType(request.getResourceType());
@@ -44,8 +41,6 @@ public class ResourceAllocationServiceImpl implements ResourceAllocationService 
             throw new ResourceNotFoundException("No resources found for type: " + request.getResourceType());
         }
 
-        // Simple strategy: pick first for "auto allocate" demo, as real logic needs
-        // complex availability checks.
         Resource selectedResource = candidates.get(0);
 
         ResourceAllocation allocation = new ResourceAllocation();
